@@ -1,6 +1,6 @@
 namespace scoreDouble {
     let target = 60
-    let started = false
+    let triggered = false
     let handler: (() => void) = null
 
     /**
@@ -10,20 +10,22 @@ namespace scoreDouble {
     export function onScoreDoubled(action: () => void) {
         handler = action
 
-        if (!started) {
-            started = true
+        game.onUpdate(function () {
+            if (!triggered && info.score() >= target) {
+                triggered = true
 
-            game.onUpdate(function () {
-                // スコアが目標に達したら実行
-                if (info.score() >= target) {
-                    if (handler) {
-                        handler()
-                    }
-
-                    // 次の目標を2倍にする
-                    target = target * 2
+                if (handler) {
+                    handler()
                 }
-            })
-        }
+
+                target = target * 2
+            }
+
+            // 次の目標まで到達していない状態になったら
+            // 次回の発動を許可する
+            if (info.score() < target) {
+                triggered = false
+            }
+        })
     }
 }
