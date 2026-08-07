@@ -1,0 +1,12 @@
+{
+    "name": "score-double",
+    "description": "Runs an event whenever the score doubles.",
+    "version": "0.0.1",
+    "dependencies": {
+        "device": "*"
+    },
+    "files": [
+        "main.ts"
+    ],
+    "preferredEditor": "tsprj"
+}
