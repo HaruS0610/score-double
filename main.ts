@@ -1,31 +1,30 @@
-namespace scoreDouble {
-    let target = 60
-    let triggered = false
+namespace scoreThirty {
+    let nextScore = 60
     let handler: (() => void) = null
+    let started = false
 
     /**
-     * スコアが2倍になったとき
+     * スコアが30増えるたびに実行
      */
-    //% block="スコアが2倍になったとき"
-    export function onScoreDoubled(action: () => void) {
+    //% block="スコアが30増えるたび"
+    export function onScoreThirty(action: () => void) {
         handler = action
 
-        game.onUpdate(function () {
-            if (!triggered && info.score() >= target) {
-                triggered = true
+        if (!started) {
+            started = true
+            nextScore = 60
 
-                if (handler) {
-                    handler()
+            game.onUpdate(function () {
+                if (info.score() >= nextScore) {
+                    while (info.score() >= nextScore) {
+                        if (handler) {
+                            handler()
+                        }
+
+                        nextScore += 30
+                    }
                 }
-
-                target = target * 2
-            }
-
-            // 次の目標まで到達していない状態になったら
-            // 次回の発動を許可する
-            if (info.score() < target) {
-                triggered = false
-            }
-        })
+            })
+        }
     }
 }
